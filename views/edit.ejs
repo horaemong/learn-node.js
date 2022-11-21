@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <form action="/edit?_method=PUT" method="POST">
+    <h3>할 일</h3>
+    <input value="<%= post.제목 %>" type="text" name="title" />
+    <h3>Due date</h3>
+    <input type="text" name="id" value="<%= post._id %>" style="display: none;">
+    <input value="<%= post.날짜 %>" type="text" name="date" />
+    <button type="submit">Submit</button>
+  </form>
+</body>
+
+</html>
