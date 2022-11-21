@@ -1,15 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <% for(var i= 0; i<posts.length; i++){ %>
-    <h3>할 일 제목 : <%=posts[i].제목 %></h3>
-    <p>할 일 마감날짜 : <%=posts[i].날짜 %></p>
-    <% } %>
-  </body> 
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <% for(var i= 0; i<posts.length; i++){ %>
+  <li>
+    <h3>할 일 제목 : <%= posts[i].제목 %></h3>
+    <p>할 일 마감날짜 : <%= posts[i].날짜 %></p>
+    <button class="delete" data-id="<%= posts[i]._id %>">삭제</button>
+  </li>
+
+  <% } %>
+
+
+
+
+
+  <script src=" https://code.jquery.com/jquery-3.4.1.min.js"> </script>
+  <script>
+    $('.delete').click((e) => {
+      var text_number = e.target.dataset.id;
+      var click_now = $(e.target);
+      console.log(text_number);
+      $.ajax({
+        method: 'DELETE',
+        url: '/delete',
+        data: {
+          _id: text_number
+        }
+      }).done((result) => {
+        console.log('성공')
+        console.log(click_now);
+        click_now.parent('li').fadeOut();
+      }).fail((xhr, textStatus, errorThrown) => {
+        console.log(xhr, textStatus, errorThrown);
+      });
+
+    });
+  </script>
+
+
+
+
+</body>
+
 </html>

@@ -3,7 +3,7 @@ const app = express();
 app.use(express.urlencoded({
   extended: true
 }))
-var total_post = 0;
+var total_post;
 
 var db;
 const MongoClient = require('mongodb').MongoClient;
@@ -53,14 +53,29 @@ app.post('/add', (req, res) => {
   db.collection('counter').findOne({
     name: '게시물갯수'
   }, (err, result) => {
-    total_post = result.totalPost;
-  });
-  db.collection('post').insertOne({
-    _id: total_post + 1,
-    제목: req.body.title,
-    날짜: req.body.date
-  }, (err, res) => {
-    console.log('저장 완료');
+    total_post = result.totalPost + 1;
+    console.log(total_post);
+    db.collection('post').insertOne({
+      _id: total_post,
+      제목: req.body.title,
+      날짜: req.body.date
+    }, (err, res) => {
+      console.log(total_post + 1);
+      console.log('저장 완료');
+      db.collection('counter').updateOne({
+        name: '게시물갯수'
+      }, {
+        $inc: {
+          totalPost: 1
+        }
+      }, (err, result) => {
+        if (err) {
+          return console.log(err);
+        }
+      });
+    });
+
+
   });
 
 });
@@ -74,6 +89,15 @@ app.get('/list', (req, res) => {
       posts: result
     });
   });
-
-
 })
+
+app.delete('/delete', (req, res) => {
+  console.log(req.body);
+  req.body._id = parseInt(req.body._id);
+  db.collection('post').deleteOne(req.body, (err, result) => {
+    console.log('삭제완료');
+    res.status(200).send({
+      message: '성공했습니다.'
+    });
+  })
+});
