@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 app.use(express.urlencoded({
@@ -10,7 +11,7 @@ var total_post;
 var db;
 const MongoClient = require('mongodb').MongoClient;
 app.set('view engine', 'ejs')
-MongoClient.connect('mongodb+srv://hojae:ksybym486@cluster0.ztdvnuk.mongodb.net/?retryWrites=true&w=majority', function (err, client) {
+MongoClient.connect(process.env.DB_URL, function (err, client) {
   //연결되면 할 일
   if (err) {
     return console.log(err);
@@ -25,7 +26,7 @@ MongoClient.connect('mongodb+srv://hojae:ksybym486@cluster0.ztdvnuk.mongodb.net/
   //   console.log('저장 완료');
   // });
 
-  app.listen(8080, function () {
+  app.listen(process.env.PORT, function () {
     console.log('listening on 8080');
   });
 });
