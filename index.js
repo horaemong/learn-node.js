@@ -147,6 +147,25 @@ app.put('/edit', (req, res) => {
 });
 
 
+app.get('/search', (req, res) => {
+  db.collection('post').find({
+    $text: {
+      $search: req.query.value
+    }
+  }).toArray((err, result) => {
+    console.log(result);
+    res.render('search.ejs', {
+      posts: result
+    })
+  });
+});
+
+
+
+
+
+
+
 // 로그인
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -222,17 +241,4 @@ passport.deserializeUser(function (아이디, done) {
       result
     });
   })
-});
-
-
-app.get('/search', (req, res) => {
-  console.log(req.query.value);
-  db.collection('post').find({
-    제목: req.query.value
-  }).toArray((err, result) => {
-    console.log(result);
-    res.render('search.ejs', {
-      posts: result
-    })
-  });
 });
