@@ -246,7 +246,7 @@ app.post('/add', (req, res) => {
 });
 
 
-app.use('/', require('./routes/shop'));
+app.use('/', require('./routes/shop '));
 
 // app.get('/shop/shirts', function (요청, 응답) {
 //   응답.send('셔츠 파는 페이지입니다.');
