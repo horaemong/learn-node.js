@@ -246,7 +246,7 @@ app.post('/add', (req, res) => {
 });
 
 
-app.use('/', require('./routes/shop '));
+app.use('/', require('./routes/shop.js'));
 
 // app.get('/shop/shirts', function (요청, 응답) {
 //   응답.send('셔츠 파는 페이지입니다.');
@@ -255,3 +255,36 @@ app.use('/', require('./routes/shop '));
 // app.get('/shop/pants', function (요청, 응답) {
 //   응답.send('바지 파는 페이지입니다.');
 // });
+
+
+//multer 라이브러리 사용
+let multer = require('multer');
+var storage = multer.diskStorage({
+
+  destination: function (req, file, cb) {
+    cb(null, './public/image')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  },
+  fileFilter: function (req, file, cb) {
+    // png, jpg, jpeg, gif 파일만 업로드 가능
+    if (file.mimetype !== 'image/png' && file.mimetype !== 'image/jpg' && file.mimetype !== 'image/jpeg' && file.mimetype !== 'image/gif') {
+      return cb(new Error('Only image files are allowed!'), false);
+    }
+    cb(null, true)
+  }
+
+});
+
+var upload = multer({
+  storage: storage
+});
+
+app.get('/upload', (req, res) => {
+  res.render('upload.ejs');
+});
+
+app.post('/upload', upload.single('profile'), (req, res) => {
+  res.send('업로드 완료');
+});
